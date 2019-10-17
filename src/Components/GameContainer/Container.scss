@@ -1,0 +1,105 @@
+.controls{
+    grid-area: controls;
+}
+
+.result{
+    grid-area: result;
+}
+
+.board{
+    grid-area: board;
+}
+
+.gameContainer{
+    box-sizing: border-box;
+    width: 75%;
+    display: grid;
+    grid-template-areas: 'controls board board result result result';
+    margin: 70px auto;
+
+    #turns{
+        grid-area: dropdown1;
+    }
+    #depth{
+        grid-area: dropdown2;
+    }
+
+    button{
+        grid-area: reset;
+    }
+
+    .controls{
+        box-sizing: border-box;
+        padding: 90px 30px 90px 0;
+        display: grid;
+        grid-template-areas: 
+            'dropdown1'
+            'dropdown2'
+            'reset';
+        button{
+            width: 130px;
+            height: 40px;
+            background-color: purple;
+            border: none;
+            padding: 7px;
+            color: white;
+            border-radius: 4px;
+            margin-top:10px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+    }
+
+    .result{
+        box-sizing: border-box;
+        padding: 70px 0 10px 0; 
+        font-family: 'Pacifico', cursive;
+        .header{
+            font-size: 40px;
+            text-align: center;
+            position: relative;
+            span{
+                margin-left: -40px;
+            }
+            img{
+                position: absolute;
+                top: 0;
+            }
+            .body{
+                text-align: center;
+                margin: auto;
+            }
+        }
+
+        .body{
+            font-size: 20px;
+            text-align: center;
+            margin-top:10px; 
+        }
+    }
+}
+
+@media(max-width: 1000px){
+    .gameContainer{
+        justify-items: center;
+        margin: 70px 0 0 0;
+        width: 100%;
+        grid-template-areas:
+            'result'
+            'board '
+            'controls';
+        .controls{
+            box-sizing: border-box;
+            justify-items: center;
+            padding: 50px;
+            grid-template-areas: 
+            'dropdown1 dropdown2'
+            'reset reset';
+            .drop-container{
+                margin: 0 10px;
+            }
+        }
+        .result{
+            padding: 0 0 10px 0; 
+        }
+    }
+}

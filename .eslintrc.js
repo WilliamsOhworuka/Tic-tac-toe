@@ -2,6 +2,7 @@ module.exports = {
     env: {
       browser: true,
       es6: true,
+      jest: true,
     },
     extends: [
       'airbnb',
@@ -11,7 +12,6 @@ module.exports = {
       SharedArrayBuffer: 'readonly',
       cy: true,
       expect: true,
-      Cypress: true
     },
     parserOptions: {
       ecmaFeatures: {

@@ -1,0 +1,72 @@
+
+.drop-container{
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: rgb(51, 51, 51);
+    width: 130px;
+    margin-bottom:10px; 
+
+    .drop{
+        box-sizing: border-box;
+        cursor: pointer;
+        border: 1px solid rgb(204, 204, 204);
+        width: 130px;
+        border-radius:4px;
+        padding: 7px; 
+        position: relative;
+        height: 32px;
+    
+        div{
+            height: 20px;
+            position: absolute;
+            top:5px;
+            right: 5px;
+            border-left: 1px solid rgb(204, 204, 204);
+            padding: 0 7px;  
+        
+            i{
+                margin-top:2px;
+                font-size: 20px;
+                color: rgb(204, 204, 204);
+            } 
+        }
+    }
+    
+    .options{
+        background-color: white;
+        z-index: 1;
+        border: 1px solid rgb(204, 204, 204);
+        border-radius: 4px;
+        list-style-type: none;
+        width: 130px;
+        padding: 0;
+        top: 40px;
+        position: absolute;
+        color: rgba(0, 0, 0, 0.54);
+
+        li{
+            box-sizing: border-box;
+            width: 100%;
+            cursor: pointer;
+            padding: 7px;
+        }
+        li:hover{
+            color: rgb(51, 51, 51);
+        }
+    }
+    
+    .drop:focus{
+        border: 2px solid blue;
+        outline:0;
+        i{
+           color: rgb(51, 51, 51);
+        } 
+    }
+}
+
+.drop-container:focus{
+    outline:0;
+}
+
+
