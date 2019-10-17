@@ -1,5 +1,5 @@
 import React from 'react';
-import Container from './GameContainer/Container';
+import Container from './Container/Container';
 import BoardContextProvider from './Context/BoardContext';
 import './app.scss';
 
