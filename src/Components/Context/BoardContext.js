@@ -1,7 +1,6 @@
 import React, { useState, createContext } from 'react';
 import PropType from 'prop-types';
-import Board from '../../Utils/Board';
-import Player from '../../Utils/Player';
+import controls from '../../Utils/Controls';
 
 export const BoardSearchContext = createContext();
 
@@ -10,11 +9,19 @@ const BoardContextProvider = ({ children }) => {
   const [clicked, setClicked] = useState([false, false, false, false,
     false, false, false, false, false]);
   const [board, setBoard] = useState(initialBoard);
-  const [newBoard, setNewBoard] = useState(null);
-  const [newPlayer, setNewPlayer] = useState(null);
-  const [playerTurn, setPlayerTurn] = useState(1);
-  let maximizing;
-  let b;
+  const [winCoords, setWinCoords] = useState(null);
+  const [depth, setDepth] = useState(2);
+  const [starting, setStarting] = useState(1);
+  const [winner, setWinner] = useState(null);
+
+  const setOptions = (type, value) => {
+    if (type === 'Starting Player') {
+      setStarting(value);
+    } else {
+      setDepth(value);
+    }
+  };
+
   const addSymbol = (position, symbol) => {
     setBoard((prevBoard) => {
       const tempBoard = [...prevBoard];
@@ -23,36 +30,28 @@ const BoardContextProvider = ({ children }) => {
     });
   };
 
-  const newGame = (depth = -1, startingPlayer = 1) => {
-    document.getElementById('win').style.display = 'none';
-    b = new Board(initialBoard);
-    setNewBoard(b);
-    setNewPlayer(new Player(Number(depth)));
-    setBoard(initialBoard);
-    // Initializing some variables for internal use
-    const starting = Number(startingPlayer);
-    maximizing = starting;
-    setPlayerTurn(starting);
-
-    if (!starting) {
-      const position = [0, 2, 4, 6, 8];
-      const firstChoice = position[Math.floor(Math.random() * position.length)];
-      const symbol = !maximizing ? 'x' : 'o';
-      newBoard.insert(symbol, firstChoice);
-      addSymbol(position[firstChoice], symbol);
-      setPlayerTurn(1); // Switch turns
+  const showWinner = (win, direction) => {
+    if (win !== 'draw') { setWinCoords(direction); }
+    switch (win) {
+      case 'x':
+        if (starting === 1) {
+          setWinner(1);
+        } else {
+          setWinner(0);
+        }
+        break;
+      case 'o':
+        if (starting === 1) {
+          setWinner(0);
+        } else {
+          setWinner(1);
+        }
+        break;
+      default:
+        setWinner(-1);
     }
   };
 
-  const showWinner = (winner, direction) => {
-    if (winner !== 'draw') {
-      for (let i = 0; i < 3; i += 1) {
-        document.getElementsByClassName(`cell-${direction[i]}`)[0].style.backgroundColor = 'green';
-      }
-    }
-    document.getElementById('win').style.display = 'block';
-    document.getElementById('win').innerHTML = `Winner ${winner}`;
-  };
 
   const checkClicked = (index) => {
     if (clicked[index]) {
@@ -61,37 +60,33 @@ const BoardContextProvider = ({ children }) => {
     return false;
   };
 
-  const handleClick = (index) => {
-    if (checkClicked(index) || newBoard.isTerminal() || !playerTurn) return false;
-    let symbol = maximizing ? 'x' : 'o'; // Maximizing player is always 'x'
-    newBoard.insert(symbol, index);
-    addSymbol(index, symbol);
+  const handleReset = () => {
+    setWinner(null);
+    setWinCoords(null);
+    setBoard((prevState) => prevState.map(() => ''));
+    setClicked((prevState) => prevState.map(() => false));
+    controls.newGame(depth, starting, addSymbol);
+  };
 
-    if (newBoard.isTerminal()) {
-      const { winner, direction } = newBoard.isTerminal();
-      showWinner(winner, direction);
+  const handleClick = (index) => {
+    if (!checkClicked(index)) {
+      setClicked((prevState) => {
+        const temp = [...prevState];
+        temp[index] = true;
+        return temp;
+      });
+      controls.play(index, showWinner, addSymbol);
     }
-    setPlayerTurn(0); // Switch turns
-    newPlayer.getBestMove(newBoard, !maximizing, (best) => {
-      symbol = !maximizing ? 'x' : 'o';
-      newBoard.insert(symbol, best);
-      addSymbol(best, symbol);
-      if (newBoard.isTerminal()) {
-        const { winner, direction } = newBoard.isTerminal();
-        showWinner(winner, direction);
-      }
-      setPlayerTurn(1); // Switch turns
-    });
-    return undefined;
   };
 
   return (
     <BoardSearchContext.Provider value={{
-      clicked,
-      setClicked,
       handleClick,
-      newGame,
+      handleReset,
+      winCoords,
       board,
+      setOptions,
+      winner,
     }}
     >
       {children}

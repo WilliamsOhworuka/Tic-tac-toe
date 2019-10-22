@@ -4,17 +4,28 @@ import Cell from './Cell/Cell';
 import './Board.scss';
 
 const Board = () => {
-  const { handleClick, board, newGame } = useContext(BoardSearchContext);
+  const {
+    handleClick, board, handleReset, winCoords,
+  } = useContext(BoardSearchContext);
 
   useEffect(() => {
-    newGame();
+    handleReset();
   }, []);
 
   return (
     <div id="board">
-      <p className="winner" id="win">jbsbksbsvn,snvn</p>
-      {board.map((cell, index) => <Cell className={`cell-${index}`} onClick={() => handleClick(index)}>{cell}</Cell>)}
-      <button type="button" className="new" onClick={() => newGame()}>New Game</button>
+      {board.map((cell, index) => {
+        const win = winCoords ? winCoords.includes(index) : null;
+        return (
+          <Cell
+            className={win ? `cell-${index} win` : `cell-${index}`}
+            testId={`cell-${index}`}
+            onClick={() => handleClick(index)}
+          >
+            <p>{cell}</p>
+          </Cell>
+        );
+      })}
     </div>
   );
 };

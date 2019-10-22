@@ -3,9 +3,9 @@
 import React from 'react';
 
 const Cell = ({
-  className, id, onClick, children,
+  className, id, onClick, children, testId,
 }) => (
-  <div className={className} id={id} key={`${id}#`} onClick={onClick}>{children}</div>
+  <div data-testid={testId} className={className} id={id} key={`${id}#`} onClick={onClick}>{children}</div>
 );
 
 export default Cell;
